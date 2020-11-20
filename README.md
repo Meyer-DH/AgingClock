@@ -5,6 +5,7 @@ The repository contains the code to predict the biological age based on gene exp
 The predict function in src/biological_age_prediction.py takes 2 files as input  
 - a CSV file with count-per-million normalized RNA-seq counts with genes as rows, and samples as columns  (e.g. Data/GSE65765_CPM.csv)
 - the CSV file Data/Predictor_Genes.csv with the predictor genes and corresponding regression coefficients  
+
 The function will return a Pandas DataFrame with the sample names in the first and the predicted biological age in the second column.
 
 
