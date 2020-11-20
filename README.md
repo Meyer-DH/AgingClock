@@ -9,6 +9,7 @@ The predict function in src/biological_age_prediction.py takes 2 files as input
 The function will return a Pandas DataFrame with the sample names in the first and the predicted biological age in the second column.
 
 
+
 To calculate the second biological age correction described in the paper run the calculate_Bio_Age_correction function in src/biological_age_correction.py.  
 It takes a Pandas DataFrame as input with samples as rows and at least one column with the biological age of the samples. 
 
