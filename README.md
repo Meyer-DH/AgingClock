@@ -1,4 +1,4 @@
-# AgingClock
+# AgingClock BiT age
 The repository contains the code to predict the biological age based on gene expression data of C. elegans.
 
 
