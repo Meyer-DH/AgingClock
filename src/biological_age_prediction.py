@@ -29,7 +29,7 @@ def make_binary(df, filter_genes='WBG'):
 
 
 
-def preproc_new_data(cpm_gene_file, predictor_gene_file, sep='\t'):
+def preproc_new_data(cpm_gene_file, predictor_gene_file, sep='\t', filter_genes='WBG'):
     '''
     Read a CPM containing CSV-file, binarize it and return only the subset of genes relevant for the prediction
 
@@ -59,6 +59,7 @@ def preproc_new_data(cpm_gene_file, predictor_gene_file, sep='\t'):
     ....
 
     :param sep: Delimiter to use, default '\t'
+    :param filter_genes: Start of the gene names in the columns. Default for C. elegans: 'WBG'
     :return: A DataFrame with binarized CPMs for the 576 genes relevant for the prediction and an additional last column with
     the elastic net coefficients
     '''
@@ -69,7 +70,7 @@ def preproc_new_data(cpm_gene_file, predictor_gene_file, sep='\t'):
     # Read the new data and transpose it to make it fit for binarization
     cpm_df = pd.read_csv(cpm_gene_file, index_col=0, sep=sep)
     cpm_df = cpm_df.T
-    binarized_df = make_binary(cpm_df)
+    binarized_df = make_binary(cpm_df, filter_genes=filter_genes)
 
     # take the subset of genes that is relevant for the prediction and transpose the DataFrame to join the elastic
     # net coefficients
@@ -81,7 +82,7 @@ def preproc_new_data(cpm_gene_file, predictor_gene_file, sep='\t'):
     return df_for_prediction
 
 
-def predict(cpm_gene_file, predictor_gene_file, cpm_gene_file_sep='\t'):
+def predict(cpm_gene_file, predictor_gene_file, cpm_gene_file_sep='\t', intercept = 103.54631743289005, filter_genes='WBG'):
     '''
 
     :param cpm_gene_file: A file with non-duplicate WormbaseID gene identifiers in the first column and 1 or more columns with
@@ -109,18 +110,19 @@ def predict(cpm_gene_file, predictor_gene_file, cpm_gene_file_sep='\t'):
     ....
 
     :param cpm_gene_file_sep: Delimiter to use, default '\t'
-
+    :param intercept: The intercept has to be added to get the final prediction, default is the intercept for C. elegans. The intercept for human fibroblasts is 59.626.
+    :param filter_genes: Start of the gene names in the columns. Default for C. elegans: 'WBG'
     :return: Pandas DataFrame with the sample names (column names) of cpm_gene_file as the index and
     the predicted biological age in hours in the second column
     '''
 
-    # The intercept has to be added to get the final prediction
-    intercept = 103.54631743289005
+    
+    
 
     # Read a CPM containing CSV-file (cpm_gene_file), binarize the gene expression and
     # get only the subset of genes relevant for the prediction (predictor_gene_file)
     # the last column of df_for_prediction contains the elastic net coefficients for the prediction
-    df_for_prediction = preproc_new_data(cpm_gene_file, predictor_gene_file, sep=cpm_gene_file_sep)
+    df_for_prediction = preproc_new_data(cpm_gene_file, predictor_gene_file, sep=cpm_gene_file_sep, filter_genes=filter_genes)
 
     prediction_result_dict = {}
     prediction_result_dict['Sample'] = []
